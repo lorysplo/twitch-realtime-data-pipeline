@@ -11,7 +11,7 @@ that builds a dimensional warehouse for analytics.
 
 ## Architecture
 
-![Architecture — speed layer (Kinesis → Lambda → DynamoDB → live dashboard) and batch layer (S3 → Spark → Glue → Redshift/dbt → BI), orchestrated by Airflow](architecture_diagram.svg)
+![Architecture](docs/architecture.jpg)
 
 - **Speed layer** answers *"what is happening right now"* (live message rate, sentiment, top emotes, viewers).
 - **Batch layer** answers *"what happened and why"* (per-channel daily reports, revenue events, raid attribution) on a clean star schema.
