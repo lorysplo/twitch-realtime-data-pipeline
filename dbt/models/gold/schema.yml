@@ -1,0 +1,32 @@
+version: 2
+
+# Data tests (run by dbt test): keys unique/not-null + fact-table foreign keys match dimensions
+models:
+  - name: dim_channel
+    columns:
+      - name: channel_key
+        tests: [unique, not_null]
+  - name: dim_user
+    columns:
+      - name: user_key
+        tests: [unique, not_null]
+  - name: fact_message
+    columns:
+      - name: channel_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_channel')
+              field: channel_key
+      - name: user_key
+        tests:
+          - relationships:
+              to: ref('dim_user')
+              field: user_key
+  - name: fact_event
+    columns:
+      - name: channel_key
+        tests:
+          - relationships:
+              to: ref('dim_channel')
+              field: channel_key

@@ -1,0 +1,13 @@
+version: 2
+
+# Bronze layer (dbt does not handle ingestion; it only references Bronze as a "source").
+# Redshift version: read S3 through the Spectrum external schema 'bronze' (see step 8 of the manual).
+# The schema name here must match the name used in CREATE EXTERNAL SCHEMA in Redshift.
+sources:
+  - name: bronze
+    schema: bronze        # Redshift Spectrum external schema (points to Glue database twitch)
+    tables:
+      # chat_scored (Parquet) after scoring by Spark (spark_sentiment.py), with an extra sentiment_score column
+      - name: chat_scored
+      # Bronze viewers external table (auto-created when the crawler scans bronze/viewers/; table name viewers)
+      - name: viewers

@@ -1,0 +1,16 @@
+name: 'twitch'
+version: '1.0.0'
+config-version: 2
+profile: 'twitch'
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Both Silver and Gold are materialized as tables (Athena CTAS -> S3 Parquet)
+models:
+  twitch:
+    silver:
+      +materialized: table
+    gold:
+      +materialized: table

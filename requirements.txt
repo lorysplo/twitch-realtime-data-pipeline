@@ -1,0 +1,16 @@
+# --- core pipeline ---
+boto3>=1.34            # AWS SDK: Kinesis, S3, Glue, Lambda, Redshift
+vaderSentiment>=3.3.2  # rule-based sentiment (shared by Lambda + Spark job)
+dbt-redshift>=1.7      # warehouse modeling (Silver + Gold star schema)
+duckdb>=0.10           # local zero-cost validation of the same models
+
+# --- dev / CI ---
+pytest>=8.0            # unit tests (tests/)
+flake8>=7.0            # lint
+
+# --- orchestration (dags/) — install in your Airflow env ---
+#   apache-airflow>=2.8
+#   apache-airflow-providers-amazon>=8.0
+
+# --- BI (superset/) — runs in its own environment, see superset/README is inline in README ---
+#   apache-superset ; sqlalchemy-redshift

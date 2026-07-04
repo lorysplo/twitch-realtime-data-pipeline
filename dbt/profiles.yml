@@ -1,0 +1,17 @@
+# dbt-redshift connection config (per requirement: the data warehouse uses Redshift Serverless).
+# Usage: first set the two environment variables, then run dbt run --profiles-dir .
+#   export REDSHIFT_HOST='<workgroup endpoint>'   # run aws redshift-serverless get-workgroup to find endpoint.address
+#   export REDSHIFT_PWD='<admin password set when creating the namespace in step 6>'
+twitch:
+  target: redshift
+  outputs:
+    redshift:
+      type: redshift
+      host: "{{ env_var('REDSHIFT_HOST') }}"
+      port: 5439
+      user: admin
+      password: "{{ env_var('REDSHIFT_PWD') }}"
+      dbname: dev                # Redshift Serverless default database
+      schema: public             # dbt creates silver/gold into this schema
+      threads: 4
+      sslmode: require

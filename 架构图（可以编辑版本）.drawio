@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="Twitch Pipeline Architecture" id="twitch-arch">
+    <mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="lblSpeed" value="SPEED LAYER (seconds)" style="text;html=1;fontStyle=1;fontSize=13;align=left;fontColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="40" y="20" width="240" height="20" as="geometry"/></mxCell>
+        <mxCell id="lblBatch" value="BATCH LAYER (daily, orchestrated by Airflow)" style="text;html=1;fontStyle=1;fontSize=13;align=left;fontColor=#38821E;" vertex="1" parent="1"><mxGeometry x="40" y="240" width="420" height="20" as="geometry"/></mxCell>
+
+        <mxCell id="replay" value="replay.py&#10;(real chat by timestamp)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="40" y="60" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="kinesis" value="Kinesis Data Streams&#10;chat + viewer-counts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="230" y="60" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="lambda" value="AWS Lambda&#10;sentiment + emotes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="420" y="60" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="ddb" value="DynamoDB&#10;rolling metrics + TTL" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="610" y="55" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="rtdash" value="Live dashboard&#10;(Lambda URL, 2s refresh)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9146FF;" vertex="1" parent="1"><mxGeometry x="770" y="60" width="150" height="50" as="geometry"/></mxCell>
+
+        <mxCell id="s3" value="S3 data lake&#10;Bronze (Parquet)" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="40" y="280" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="spark" value="Glue Spark&#10;VADER scoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="200" y="285" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="crawler" value="Glue Crawler&#10;Data Catalog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="380" y="285" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="redshift" value="Redshift Serverless&#10;+ Spectrum" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="560" y="280" width="130" height="60" as="geometry"/></mxCell>
+        <mxCell id="dbt" value="dbt&#10;Silver + Gold star schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="730" y="285" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="bi" value="BI dashboard&#10;Superset / Chart.js (6 charts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#38821E;" vertex="1" parent="1"><mxGeometry x="730" y="380" width="160" height="50" as="geometry"/></mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="replay" target="kinesis"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="kinesis" target="lambda"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="lambda" target="ddb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="ddb" target="rtdash"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="s3" target="spark"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="spark" target="crawler"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="crawler" target="redshift"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="redshift" target="dbt"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="dbt" target="bi"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="raw history" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="replay" target="s3"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

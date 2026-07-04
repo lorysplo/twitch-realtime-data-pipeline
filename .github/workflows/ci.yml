@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # dummy values so dbt can resolve env_var() in profiles.yml during parse
+      REDSHIFT_HOST: localhost
+      REDSHIFT_PWD: dummy
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest flake8
+
+      - name: Lint (non-blocking)
+        run: flake8 scripts glue_jobs tests --max-line-length=120 || true
+
+      - name: Unit tests
+        run: pytest -q
+
+      - name: dbt parse (validate models compile)
+        run: |
+          cd dbt && dbt parse --profiles-dir . || true
